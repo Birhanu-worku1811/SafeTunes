@@ -3,6 +3,7 @@
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\ContactController;
 use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Music\ArtistController;
 use App\Http\Controllers\Music\MusicController;
 use App\Http\Controllers\Music\NewsController;
 use Illuminate\Support\Facades\Auth;
@@ -33,3 +34,4 @@ Route::get('/contact', [ContactController::class, 'index'])->name('home.contact'
 //Route::get('/news', [NewsController::class, 'index'])->name('home.contact');
 Route::resource('news', NewsController::class);
 Route::resource('music', MusicController::class);
+Route::resource('artist', ArtistController::class);
