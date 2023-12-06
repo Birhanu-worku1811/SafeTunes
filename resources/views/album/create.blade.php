@@ -1,0 +1,60 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Create New Album</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('album.store') }}" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
+                        @error('title')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4">{{ old('description') }}</textarea>
+                        @error('description')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="release_date" class="form-label">Release Date</label>
+                        <input type="date" class="form-control" id="release_date" name="release_date" value="{{ old('release_date') }}" required>
+                        @error('release_date')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Album Cover Image</label>
+                        <input type="file" class="form-control" id="cover_image" name="cover_image" accept="image/*" required>
+                        @error('cover_image')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="audio_files" class="form-label">Audio Files (Multiple)</label>
+                        <input type="file" class="form-control" id="audio_files" name="audio_files[]" accept="audio/*" multiple required>
+                        @error('audio_files.*')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Create Album</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection

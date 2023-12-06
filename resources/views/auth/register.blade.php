@@ -8,9 +8,8 @@
                     <div class="card-header">{{ __('Register') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
+                        <form id="registrationForm" method="POST" action="{{ route('register') }}">
                             @csrf
-
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
@@ -48,19 +47,18 @@
                                 <label class="col-md-4 col-form-label text-md-end"></label>
                                 <div class="col-md-6 d-flex align-items-center">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="is_artist" name="is_artist">
+                                        <input class="form-check-input" type="checkbox" id="is_artist" name="is_artist" value="1" {{ old('is_artist') ? 'checked' : '' }}>
                                         <label class="form-check-label"
                                                for="is_artist">{{ __('I am an artist') }}</label>
                                     </div>
                                 </div>
                             </div>
-
                             <div id="artist-fields" style="display: none;">
                                 <div class="row mb-3">
                                     <label for="genre"
                                            class="col-md-4 col-form-label text-md-end">{{ __('Genre') }}</label>
                                     <div class="col-md-6">
-                                        <input id="genre" type="text" class="form-control" name="genre">
+                                        <input id="genre" type="text" class="form-control" name="genre" value="{{ old('genre') }}">
                                         <!-- You can replace "text" input with a dropdown/select menu for predefined genres -->
                                     </div>
                                 </div>
@@ -69,16 +67,16 @@
                                     <label for="biography"
                                            class="col-md-4 col-form-label text-md-end">{{ __('Biography') }}</label>
                                     <div class="col-md-6">
-                                        <textarea id="biography" class="form-control" name="biography"
-                                                  rows="4"></textarea>
+                                        <textarea id="biography" class="form-control" name="bio"
+                                                  rows="4">{{ old('bio') }}</textarea>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <label for="band_name"
-                                           class="col-md-4 col-form-label text-md-end">{{ __('Band Name (if applicable)') }}</label>
+                                           class="col-md-4 col-form-label text-md-end">{{ __('Band Name (if any)') }}</label>
                                     <div class="col-md-6">
-                                        <input id="band_name" type="text" class="form-control" name="band_name">
+                                        <input id="band_name" type="text" class="form-control" name="band_name" value="{{ old('band_name') }}">
                                     </div>
                                 </div>
 
@@ -86,7 +84,7 @@
                                     <label for="instruments"
                                            class="col-md-4 col-form-label text-md-end">{{ __('Instruments') }}</label>
                                     <div class="col-md-6">
-                                        <input id="instruments" type="text" class="form-control" name="instruments">
+                                        <input id="instruments" type="text" class="form-control" name="instruments" value="{{ old('instruments') }}">
                                         <!-- You can replace "text" input with a multi-select or checkboxes for instruments -->
                                     </div>
                                 </div>
@@ -133,18 +131,37 @@
         </div>
     </div>
     <script>
-        // Add script to show/hide additional fields when the checkbox is clicked
-        document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function () {
             const checkbox = document.getElementById('is_artist');
             const artistFields = document.getElementById('artist-fields');
 
+            // Function to toggle artist fields visibility
+            const toggleArtistFields = () => {
+            artistFields.style.display = checkbox.checked ? 'block' : 'none';
+        };
+
+            // Toggle artist fields on checkbox change
             checkbox.addEventListener('change', function () {
-                if (checkbox.checked) {
-                    artistFields.style.display = 'block';
-                } else {
-                    artistFields.style.display = 'none';
-                }
-            });
+            toggleArtistFields();
         });
+
+            // Show artist fields if checkbox is checked on page load
+            toggleArtistFields();
+        });
+
+            // Registration of user or artist
+            document.addEventListener('DOMContentLoaded', function () {
+            const registrationForm = document.getElementById('registrationForm');
+            const isArtistCheckbox = document.getElementById('is_artist');
+
+            isArtistCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+            registrationForm.action = "{{ route('artist.register') }}";
+        } else {
+            registrationForm.action = "{{ route('register') }}";
+        }
+        });
+        });
+
     </script>
 @endsection

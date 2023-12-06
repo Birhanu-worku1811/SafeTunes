@@ -1,0 +1,5 @@
+stopped: making middleware and policy for news and albums
+
+
+don't forget: Creating an Admin
+    Making policies and middleware for news

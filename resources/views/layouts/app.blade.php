@@ -1,4 +1,5 @@
-<!doctype html>
+@php use App\Models\Music;use Illuminate\Support\Facades\Auth; @endphp
+    <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ isset($pageTitle) ? config('app.name', 'SafeTunes') . ' - ' . $pageTitle : config('app.name', 'SafeTunes') }}</title>
+    <title>{{ isset($pageTitle) ? config('app.name', 'SafeTunes') . ' | ' . $pageTitle : config('app.name', 'SafeTunes') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -50,7 +51,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownPages">
                         <a class="dropdown-item" href="{{ route('artist.index') }}">Artists</a>
                         <a class="dropdown-item" href="#">Blog</a>
-                        <a class="dropdown-item" href="{{ route('') }}">Albums</a>
+                        <a class="dropdown-item" href="{{ route('album.index') }}">Albums</a>
                         <a class="dropdown-item" href="{{route('music.index')}}">Playlists</a>
                         <a class="dropdown-item" href="#">Categories</a>
                         <a class="dropdown-item" href="{{ route('news.index') }}">News</a>
@@ -80,6 +81,12 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            @can('create', Music::class)
+                                <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
+                            @endcan
+                            <a class="dropdown-item"
+                               href="{{ route('artist.show', ['artist' => Auth::user()->artist_id ?? Auth::user()->id]) }}"> My Profile</a>
+                            <a class="dropdown-item" href="#">Favourites</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -102,7 +109,7 @@
 
 <footer
     class="text-center text-lg-start text-white"
-    style="background-color: black" >
+    style="background-color: black">
     <!-- Grid container -->
     <div class="container p-4 pb-0">
         <!-- Section: Links -->
