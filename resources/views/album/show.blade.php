@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-4 mb-4">
