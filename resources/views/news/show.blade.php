@@ -21,15 +21,17 @@
                         <p class="card-text">Published Date: {{ $news->published_date }}</p>
                     </div>
                     <div class="col-md-12 text-md-end mt-3">
-                        <form method="POST" action="{{ route('news.destroy', $news->id) }}" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger">Delete News</button>
-                        </form>
-                        <form method="get" action="{{ route('news.edit', $news->id) }}" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-info">Edit News</button>
-                        </form>
+                        @if(\Illuminate\Support\Facades\Auth::guard('admin')->check())
+                            <form method="POST" action="{{ route('news.destroy', $news->id) }}" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger">Delete News</button>
+                            </form>
+                            <form method="get" action="{{ route('news.edit', $news->id) }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-info">Edit News</button>
+                            </form>
+                        @endif
                         <a href="{{ route('news.index') }}" class="btn btn-outline-primary">Back to News</a>
                     </div>
                 </div>

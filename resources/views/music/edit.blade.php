@@ -62,6 +62,17 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="thumbnail" class="form-label">Music Cover Image</label>
+                        <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" id="thumbnail" name="thumbnail" accept="image/*">
+                        <img id="thumbnail" src="{{ $music->thumbnail }}" alt="Cover Image" style="max-width: 200px; @if(!$music->thumbnail_url) display: none; @endif">
+                        @error('thumbnail')
+                        <div class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label for="music_file" class="form-label">Music File (Audio/Video)</label>
                         <input type="file" class="form-control @error('music_file') is-invalid @enderror" id="music_file" name="music_file" accept="audio/*">
                         @error('music_file')
@@ -79,3 +90,14 @@
         </div>
     </div>
 @endsection
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const img = document.getElementById('thumbnail');
+            img.src = reader.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

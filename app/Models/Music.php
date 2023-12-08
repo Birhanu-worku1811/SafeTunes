@@ -19,6 +19,7 @@ class Music extends Model
         'instrument',
         'band_name',
         'music_file',
+        'thumbnail',
         'artist_id',
         'album_id',
     ];

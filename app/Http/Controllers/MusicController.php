@@ -14,7 +14,8 @@ class MusicController extends Controller
     public function index()
     {
         $pageTitle = 'musics';
-        return view('music.index', compact('pageTitle'));
+        $musics = Music::all();
+        return view('music.index', compact(['pageTitle', 'musics']));
     }
 
     /**
@@ -43,6 +44,7 @@ class MusicController extends Controller
             'instrument' => 'required|string|max:255',
             'band_name' => 'required|string|max:255',
             'music_file' => 'required|mimes:mp3,wav,mp4,mov,ogg|max: 102400',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
 //        dd($file->getClientOriginalName());
@@ -54,6 +56,12 @@ class MusicController extends Controller
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('uploads/music'), $fileName);
 
+            if ($request->hasFile('thumbnail')) {
+                $coverImage = $request->file('thumbnail');
+                $coverImageName = 'uploads/music/covers/'.time() . '_' . $coverImage->getClientOriginalName();
+                $coverImage->move(public_path('uploads/music/covers'), $coverImageName);
+            }
+
             // Create a new Music record in the database
             $music = Music::create([
                 'title' => $request->title,
@@ -63,6 +71,7 @@ class MusicController extends Controller
                 'band_name' => $request->band_name,
                 'music_file' => 'uploads/music/'.$fileName,
                 'artist_id' =>$artistId,
+                'thumbnail' => $coverImageName ?? null,
             ]);
 
             return redirect()->route('music.show', ['music'=>$music->id])->with('success', 'Music uploaded successfully!');
@@ -118,6 +127,13 @@ class MusicController extends Controller
         $music->genre = $request->genre;
         $music->instrument = $request->instrument;
         $music->band_name = $request->band_name;
+
+        if ($request->hasFile('thumbnail')) {
+            $image = $request->file('thumbnail');
+            $imageName = 'uploads/music/covers/'.time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/music/covers/'), $imageName);
+            $music->thumbnail = $imageName;
+        }
 
         if ($request->hasFile('music_file') && $request->file('music_file')->isValid()) {
             $file = $request->file('music_file');

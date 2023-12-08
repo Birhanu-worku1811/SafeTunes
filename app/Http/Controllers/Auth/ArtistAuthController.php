@@ -75,5 +75,4 @@ class ArtistAuthController extends Controller
         return back()->withError('Registration failed');
     }
 
-    // Add other necessary actions for artist management
 }

@@ -20,10 +20,10 @@ class MusicMiddleware
 
         if (!Auth::check() || Auth::user()->artist_id===null){
 //            dd('here');
-            abort(404);
+            abort(401);
         }
         if ($request->isMethod('delete') || $request->isMethod('put')){
-            dd('here');
+//            dd('here');
             $musicId = $request->route('music');
             if (!$this->isOwner($musicId)){
                 abort(401);

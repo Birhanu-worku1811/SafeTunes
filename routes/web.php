@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\ArtistAuthController;
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\ContactController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\NewsController;
+use App\Http\Middleware\AlbumMiddleware;
 use App\Http\Middleware\ArtistMiddleware;
 use App\Http\Middleware\MusicMiddleware;
+use App\Http\Middleware\NewsMiddleware;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +32,13 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
+Route::get('/admin', [AdminAuthController::class, 'loginForm'])->name('admin-auth.login-form');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin-auth.login');
+Route::post('/admin', [AdminAuthController::class, 'logout'])->name('admin-auth.logout');
+Route::get("admin/profile/{id}", function ($id){
+    return view('admin.profile', compact('id'));
+})->name('admin.profile');
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/home', [HomeController::class, 'index'])->name('home.index');
@@ -37,7 +48,8 @@ Auth::routes();
 Route::get('/about', [AboutController::class, 'index'])->name('home.about');
 Route::get('/contact', [ContactController::class, 'index'])->name('home.contact');
 //Route::get('/news', [NewsController::class, 'index'])->name('home.contact');
-Route::resource('news', NewsController::class);
+Route::resource('news', NewsController::class)->middleware(NewsMiddleware::class)->only('create', 'edit', 'update', 'destroy', 'store');
+Route::resource('/news', NewsController::class)->only('index', 'show');
 
 Route::resource('music', MusicController::class)
     ->middleware(MusicMiddleware::class)
@@ -47,8 +59,14 @@ Route::resource('music', MusicController::class)->only('index', 'show');
 
 Route::resource('artist', ArtistController::class)->only('edit', 'update', 'index', 'show');
 //Route::resource('users', 'App\Http\Controllers\UserController')->only('show', 'edit', 'update');
-Route::resource('album', AlbumController::class);
+Route::resource('album', AlbumController::class)
+    ->middleware(AlbumMiddleware::class)->only('create', 'store', 'edit', 'update', 'destroy');
+Route::resource('album', AlbumController::class)->only('index', 'show');
 
+Route::get('/user/profile/{id}', function ($id){
+    $user = User::findOrFail($id);
+    return view('user.profile', compact('user'));
+})->name('user.profile');
 
 // Artist Routes
 

@@ -13,6 +13,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -50,9 +52,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownPages">
                         <a class="dropdown-item" href="{{ route('artist.index') }}">Artists</a>
-                        <a class="dropdown-item" href="#">Blog</a>
                         <a class="dropdown-item" href="{{ route('album.index') }}">Albums</a>
-                        <a class="dropdown-item" href="{{route('music.index')}}">Playlists</a>
+                        <a class="dropdown-item" href="{{ route('music.index') }}">Musics</a>
+                        {{--                        <a class="dropdown-item" href="{{route('music.index')}}">Playlists</a>--}}
                         <a class="dropdown-item" href="#">Categories</a>
                         <a class="dropdown-item" href="{{ route('news.index') }}">News</a>
                     </div>
@@ -61,7 +63,8 @@
                     <a class="nav-link" href="{{ route('home.contact') }}">{{ __('Contact') }}</a>
                 </li>
 
-                @guest
+                {{--                {{dd(\auth()->guard('admin')->guest())}}--}}
+                @guest('admin')
                     @if (Route::has('register'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -77,15 +80,29 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }}
+                            {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->name: Auth::user()->name }}
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             @can('create', Music::class)
                                 <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
                             @endcan
-                            <a class="dropdown-item"
-                               href="{{ route('artist.show', ['artist' => Auth::user()->artist_id ?? Auth::user()->id]) }}"> My Profile</a>
+                            @auth('admin')
+                                <a class="dropdown-item"
+                                   href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
+                                    My Profile</a>
+                            @endauth
+                            @auth()
+                                @if(Auth::user()->is_artist)
+                                    <a class="dropdown-item"
+                                       href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
+                                        My Profile</a>
+                                @else
+                                    <a class="dropdown-item"
+                                       href="{{ route('user.profile', ['user' => Auth::user()->id]) }}">
+                                        My Profile</a>
+                                @endif
+                            @endauth
                             <a class="dropdown-item" href="#">Favourites</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
@@ -99,6 +116,11 @@
                         </div>
                     </li>
             @endguest
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
         </div>
     </div>
 </nav>
@@ -109,7 +131,7 @@
 
 <footer
     class="text-center text-lg-start text-white"
-    style="background-color: black">
+    style="background-color: #051b11">
     <!-- Grid container -->
     <div class="container p-4 pb-0">
         <!-- Section: Links -->
@@ -122,8 +144,8 @@
                         {{ env("APP_NAME") }}
                     </h6>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit.
+                        Listen to Musics of
+                        your choice while staying secured
                     </p>
                 </div>
                 <!-- Grid column -->
@@ -132,18 +154,33 @@
 
                 <!-- Grid column -->
                 <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                    <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Places</h6>
                     <p>
-                        <a class="text-white">MDBootstrap</a>
+                        <a href="{{route('home.index')}}" class="text-white">Home</a>
                     </p>
                     <p>
-                        <a class="text-white">MDWordPress</a>
+                        <a href="{{ route('home.about') }}" class="text-white">Contact</a>
                     </p>
                     <p>
-                        <a class="text-white">BrandFlow</a>
+                        <a href="{{ route('home.about') }}" class="text-white">About</a>
+                    </p>
+                </div>
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Music</h6>
+                    <p>
+                        <a href="{{ route('news.index') }}" class="text-white">News</a>
                     </p>
                     <p>
-                        <a class="text-white">Bootstrap Angular</a>
+                        <a href="{{ route('artist.index') }}" class="text-white">Artists</a>
+                    </p>
+                    <p>
+                        <a href="{{ route('music.index') }}" class="text-white">Musics</a>
+                    </p>
+                    <p>
+                        <a href="{{ route('album.index') }}" class="text-white">Albums</a>
+                    </p>
+                    <p>
+                        <a href="#" class="text-white">Categories</a>
                     </p>
                 </div>
                 <!-- Grid column -->
@@ -153,15 +190,6 @@
                 <!-- Grid column -->
                 <hr class="w-100 clearfix d-md-none"/>
 
-                <!-- Grid column -->
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-                    <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
-                    <p><i class="fas fa-envelope mr-3"></i> info@gmail.com</p>
-                    <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-                    <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
-                </div>
-                <!-- Grid column -->
 
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
@@ -171,25 +199,16 @@
                     <a
                         class="btn btn-primary btn-floating m-1"
                         style="background-color: #3b5998"
-                        href="#!"
+                        href="https://www.facebook.com"
                         role="button"
                     ><i class="fab fa-facebook-f"></i
-                        ></a>
-
-                    <!-- Twitter -->
-                    <a
-                        class="btn btn-primary btn-floating m-1"
-                        style="background-color: #55acee"
-                        href="#!"
-                        role="button"
-                    ><i class="fab fa-twitter"></i
                         ></a>
 
                     <!-- Google -->
                     <a
                         class="btn btn-primary btn-floating m-1"
                         style="background-color: #dd4b39"
-                        href="#!"
+                        href="birhanuworku2011@gmail.com"
                         role="button"
                     ><i class="fab fa-google"></i
                         ></a>
@@ -198,7 +217,7 @@
                     <a
                         class="btn btn-primary btn-floating m-1"
                         style="background-color: #ac2bac"
-                        href="#!"
+                        href="https://www.instagram.com"
                         role="button"
                     ><i class="fab fa-instagram"></i
                         ></a>
@@ -207,7 +226,7 @@
                     <a
                         class="btn btn-primary btn-floating m-1"
                         style="background-color: #0082ca"
-                        href="#!"
+                        href="https://www.linkdin.com"
                         role="button"
                     ><i class="fab fa-linkedin-in"></i
                         ></a>
@@ -215,11 +234,16 @@
                     <a
                         class="btn btn-primary btn-floating m-1"
                         style="background-color: #333333"
-                        href="#!"
+                        href="https://www.github.com"
                         role="button"
                     ><i class="fab fa-github"></i
                         ></a>
+
                 </div>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
             <!--Grid row-->
         </section>
@@ -232,9 +256,9 @@
         class="text-center p-3"
         style="background-color: rgba(0, 0, 0, 0.2)"
     >
-        © 2020 Copyright:
-        <a class="text-white" href="https://mdbootstrap.com/"
-        >MDBootstrap.com</a
+        © 2023 Copyright:
+        <a class="text-white" href="birhanuworu.ethiopia"
+        >Birhanu worku</a
         >
     </div>
     <!-- Copyright -->

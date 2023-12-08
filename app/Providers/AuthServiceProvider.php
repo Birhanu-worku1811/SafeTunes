@@ -5,8 +5,10 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Artist;
 use App\Models\Music;
+use App\Models\News;
 use App\Policies\ArtistPolicy;
 use App\Policies\MusicPolicy;
+use App\Policies\NewsPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Artist::class=>ArtistPolicy::class,
         Music::class=>MusicPolicy::class,
+        News::class=>NewsPolicy::class,
     ];
 
     /**
