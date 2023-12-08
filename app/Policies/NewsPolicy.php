@@ -14,7 +14,7 @@ class NewsPolicy
      */
     public function viewAny(User $user): bool
     {
-
+        return false;
     }
 
     /**
