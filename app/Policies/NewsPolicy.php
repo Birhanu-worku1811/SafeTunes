@@ -9,12 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class NewsPolicy
 {
+    public function before(User $user): bool|null
+    {
+        if (Auth::guard('admin')->check()) {
+            return true;
+        }
+
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**

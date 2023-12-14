@@ -20,9 +20,9 @@
                             Your browser does not support the audio element.
                         </audio>
                         <div class="mt-3">
-                            @cannot('update', $music)
+                            @can('update', $music)
                                 <a href="{{ route('music.edit', $music->id) }}" class="btn btn-primary">Edit</a>
-                            @endcannot
+                            @endcan
                             @can('delete', $music)
                                 <form action="{{ route('music.destroy', $music->id) }}" method="POST" class="d-inline">
                                     @csrf

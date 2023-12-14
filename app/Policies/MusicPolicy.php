@@ -10,11 +10,26 @@ use Illuminate\Support\Facades\Auth;
 class MusicPolicy
 {
     /**
+     * Perform pre-authorization checks.
+     */
+
+    public function before(User $user): bool|null
+    {
+//        dd(Auth::guard('admin')->check());
+        if (Auth::guard('admin')->check()) {
+            return true;
+        }
+
+        return null;
+    }
+
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return True;
     }
 
     /**

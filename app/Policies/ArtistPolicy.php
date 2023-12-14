@@ -14,7 +14,7 @@ class ArtistPolicy
      */
     public function viewAny(User $user): bool
     {
-
+        return true;
     }
 
     /**

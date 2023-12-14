@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\ContactController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Middleware\AlbumMiddleware;
 use App\Http\Middleware\ArtistMiddleware;
 use App\Http\Middleware\MusicMiddleware;
@@ -72,8 +73,10 @@ Route::get('/user/profile/{id}', function ($id){
 
 //Route::get('artist/login', [ArtistAuthController::class, 'index'])->name('artist.login');
 
-Route::get('artist/register', [ArtistAuthController::class, 'registrationForm'])->name('artist.register');
-Route::get('artist/login', [ArtistAuthController::class, 'loginForm'])->name('artist.login');
-Route::post('artist/register', [ArtistAuthController::class, 'register'])->name('artist.register.submit');
-Route::post('artist/login', [ArtistAuthController::class, 'login'])->name('artist.login.submit');
+//Route::get('artist/register', [ArtistAuthController::class, 'registrationForm'])->name('artist.register');
+//Route::get('artist/login', [ArtistAuthController::class, 'loginForm'])->name('artist.login');
+//Route::post('artist/register', [ArtistAuthController::class, 'register'])->name('artist.register.submit');
+//Route::post('artist/login', [ArtistAuthController::class, 'login'])->name('artist.login.submit');
+
+Route::get("/search", [SearchController::class, 'search_results'])->name("search.results");
 

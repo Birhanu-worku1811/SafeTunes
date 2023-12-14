@@ -13,10 +13,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-..." crossorigin="anonymous"/>
+    <div class="animate__animated animate__zoomIn"> <!-- Add animation classes here -->
 
 
-    <!-- Scripts -->
+        <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -115,10 +117,11 @@
                             </form>
                         </div>
                     </li>
-            @endguest
+                @endguest
 
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex" role="search" action="{{route("search.results")}}" method="get">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                           name="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
         </div>
@@ -240,8 +243,8 @@
                         ></a>
 
                 </div>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex" role="search" method="get" action="{{ route("search.results") }}">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
