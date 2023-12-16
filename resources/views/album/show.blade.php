@@ -18,7 +18,7 @@
                 @endcan
             </div>
             <div class="col-md-8">
-                <h2>{{ $album->title }}</h2>
+                <h2>{{ Crypt::decrypt($album->title) }}</h2>
                 <p>{{ $album->description }}</p>
                 <h3>Tracks</h3>
                 <ul>

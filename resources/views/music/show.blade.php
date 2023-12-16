@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-9">
-                        <h5 class="card-title">{{ $music->title }}</h5>
+                        <h5 class="card-title">{{ Crypt::decrypt($music->title) }}</h5>
                         <!-- Include the rest of the details -->
                         <hr>
                         <p class="card-text">Artist: {{ $music->artist->name }}</p>

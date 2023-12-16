@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Models\Music;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class AlbumController extends Controller
 {
@@ -48,7 +49,7 @@ class AlbumController extends Controller
 
 
         $album = Album::create([
-            'title' => $validatedData['title'],
+            'title' => Crypt::encrypt($validatedData['title']),
             'description' => $validatedData['description'],
             'cover_image' => $coverImageName,
             'release_date' => $validatedData['release_date'],
@@ -71,7 +72,7 @@ class AlbumController extends Controller
                     'album_id' => $album->id,
                     'music_file' => 'uploads/music/'.$audioFileName,
                     'artist_id' => Auth::user()->artist_id,
-                    'title' => $album->title." ".$musicTitle
+                    'title' => Crypt::decrypt($musicTitle)
                 ]);
             }
         }
@@ -112,6 +113,8 @@ class AlbumController extends Controller
             'release_date' =>'required|date',
             'audio_files.*' => 'required|mimes:mp3,wav,ogg',
         ]);
+
+        $validatedData['title'] = Crypt::encrypt($validatedData['title']);
 
         $album = Album::findOrFail($id);
 

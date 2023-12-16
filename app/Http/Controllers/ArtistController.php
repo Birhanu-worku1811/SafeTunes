@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\ArtistMiddleware;
 use App\Models\Artist;
-use App\Models\Music;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class ArtistController extends Controller
 {
@@ -65,10 +65,13 @@ class ArtistController extends Controller
         $artist = Artist::findOrFail($id);
         $userAsArtist = User::where('artist_id', $id);
 
+        // Encrypting the email
+        $validatedData['email'] = Crypt::encrypt($validatedData['email']);
+
         $artist->update($validatedData);
         $userAsArtist->update([
             'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
+            'email' => Crypt::encrypt($validatedData['email']),
         ]);
 
         // Redirect back with a success message

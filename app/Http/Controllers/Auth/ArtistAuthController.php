@@ -29,11 +29,11 @@ class ArtistAuthController extends Controller
         if (Auth::guard('web')->attempt($credentials)) {
 //            dd($credentials);
             return redirect()->intended('artists.index')
-            ->withSuccess('Signed in');
+            ->with('success', 'Signed in');
         }
 
 //        dd('sheet');
-        return redirect()->route('login')->withError('Login details are not valid');
+        return redirect()->route('login')->with('error', 'Login details are not valid');
     }
 
     public function registrationForm()
@@ -51,7 +51,7 @@ class ArtistAuthController extends Controller
         ]);
 
         $data = $request->all();
-//        dd($data);
+//        Hashing the password
         $data['password'] = Hash::make($data['password']);
 
         $artist = Artist::create($data);
@@ -72,7 +72,7 @@ class ArtistAuthController extends Controller
             ->with('success', 'You have signed up as an artist');
         }
 
-        return back()->withError('Registration failed');
+        return back()->with('error', 'Registration failed');
     }
 
 }

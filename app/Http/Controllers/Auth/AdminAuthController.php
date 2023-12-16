@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Artist;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
@@ -30,7 +27,7 @@ class AdminAuthController extends Controller
 //        dd($credentials);
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->intended('/')->with('success', 'Signed in');
+            return redirect()->intended("/home")->with('success', 'Signed in');
         }
 
         return redirect()->route('admin-auth.login-form')->with('error', 'Login details are not valid!');

@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
+
 Route::get('/admin', [AdminAuthController::class, 'loginForm'])->name('admin-auth.login-form');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin-auth.login');
 Route::post('/admin', [AdminAuthController::class, 'logout'])->name('admin-auth.logout');
@@ -73,10 +74,23 @@ Route::get('/user/profile/{id}', function ($id){
 
 //Route::get('artist/login', [ArtistAuthController::class, 'index'])->name('artist.login');
 
-//Route::get('artist/register', [ArtistAuthController::class, 'registrationForm'])->name('artist.register');
-//Route::get('artist/login', [ArtistAuthController::class, 'loginForm'])->name('artist.login');
-//Route::post('artist/register', [ArtistAuthController::class, 'register'])->name('artist.register.submit');
-//Route::post('artist/login', [ArtistAuthController::class, 'login'])->name('artist.login.submit');
+Route::get('artist/register', [ArtistAuthController::class, 'registrationForm'])->name('artist.register');
+Route::get('artist/login', [ArtistAuthController::class, 'loginForm'])->name('artist.login');
+Route::post('artist/register', [ArtistAuthController::class, 'register'])->name('artist.register.submit');
+Route::post('artist/login', [ArtistAuthController::class, 'login'])->name('artist.login.submit');
 
 Route::get("/search", [SearchController::class, 'search_results'])->name("search.results");
 
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\User $user){
+    $user->markEmailAsVerified();
+    return redirect('/');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request){
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

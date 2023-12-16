@@ -66,16 +66,58 @@
                 </li>
 
                 {{--                {{dd(\auth()->guard('admin')->guest())}}--}}
-                @guest('admin')
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
+                @guest()
+                    @if(!Auth::guard('admin')->check())
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
 
-                    @endif
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        @endif
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->name: Auth::user()->name }}
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                @can('create', Music::class)
+                                    <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
+                                @endcan
+                                @auth('admin')
+                                    <a class="dropdown-item"
+                                       href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
+                                        My Profile</a>
+                                @endauth
+                                @auth()
+                                    @if(Auth::user()->is_artist)
+                                        <a class="dropdown-item"
+                                           href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
+                                            My Profile</a>
+                                    @else
+                                        <a class="dropdown-item"
+                                           href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
+                                            My Profile</a>
+                                    @endif
+                                @endauth
+                                <a class="dropdown-item" href="#">Favourites</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                      class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
                         </li>
                     @endif
                 @else
@@ -101,7 +143,7 @@
                                         My Profile</a>
                                 @else
                                     <a class="dropdown-item"
-                                       href="{{ route('user.profile', ['user' => Auth::user()->id]) }}">
+                                       href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
                                         My Profile</a>
                                 @endif
                             @endauth
@@ -244,7 +286,8 @@
 
                 </div>
                 <form class="d-flex" role="search" method="get" action="{{ route("search.results") }}">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                           name="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>

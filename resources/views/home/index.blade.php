@@ -22,7 +22,7 @@
                     <div class="card mb-3">
 {{--                        <img src="{{ $album->cover_image }}" class="card-img-top" alt="Album Cover">--}}
                         <div class="card-body">
-                            <h5 class="card-title">{{ $album->title }}</h5>
+                            <h5 class="card-title">{{ ($album->title) }}</h5>
                             <a href="{{ route('album.show', $album->id) }}" class="btn btn-primary">Read More</a>
                         </div>
                     </div>

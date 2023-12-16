@@ -4,13 +4,14 @@ namespace App\Policies;
 
 use App\Models\Artist;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ArtistPolicy
 {
     /**
      * Determine whether the user can view any models.
+     * @param User $user
+     * @return bool
      */
     public function viewAny(User $user): bool
     {

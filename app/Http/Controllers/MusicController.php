@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Music;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class MusicController extends Controller
 {
@@ -64,7 +65,7 @@ class MusicController extends Controller
 
             // Create a new Music record in the database
             $music = Music::create([
-                'title' => $request->title,
+                'title' => Crypt::encrypt($request->title),
                 'album' => $request->album,
                 'genre' => $request->genre,
                 'instrument' => $request->instrument,
@@ -122,7 +123,7 @@ class MusicController extends Controller
 
         $music = Music::findOrFail($id);
 
-        $music->title = $request->title;
+        $music->title = Crypt::encrypt($request->title);
         $music->album = $request->album;
         $music->genre = $request->genre;
         $music->instrument = $request->instrument;
