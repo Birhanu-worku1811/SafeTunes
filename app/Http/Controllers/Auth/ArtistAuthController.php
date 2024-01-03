@@ -46,7 +46,7 @@ class ArtistAuthController extends Controller
 //        dd($request);
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:artists|unique::users',
+            'email' => 'required|email|unique:artists|unique:users',
             'password' => 'required|min:6',
         ]);
 

@@ -15,6 +15,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           integrity="sha512-..." crossorigin="anonymous"/>
+
     <div class="animate__animated animate__zoomIn"> <!-- Add animation classes here -->
 
 
@@ -25,7 +26,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'SafeTunes') }}
+            {{--            {{ config('app.name', 'SafeTunes') }}--}}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -56,7 +57,7 @@
                         <a class="dropdown-item" href="{{ route('artist.index') }}">Artists</a>
                         <a class="dropdown-item" href="{{ route('album.index') }}">Albums</a>
                         <a class="dropdown-item" href="{{ route('music.index') }}">Musics</a>
-                        {{--                        <a class="dropdown-item" href="{{route('music.index')}}">Playlists</a>--}}
+                        <a class="dropdown-item" href="{{route('music.index')}}">Playlists</a>
                         <a class="dropdown-item" href="#">Categories</a>
                         <a class="dropdown-item" href="{{ route('news.index') }}">News</a>
                     </div>
@@ -65,7 +66,6 @@
                     <a class="nav-link" href="{{ route('home.contact') }}">{{ __('Contact') }}</a>
                 </li>
 
-                {{--                {{dd(\auth()->guard('admin')->guest())}}--}}
                 @guest()
                     @if(!Auth::guard('admin')->check())
                         @if (Route::has('register'))
@@ -169,6 +169,129 @@
         </div>
     </div>
 </nav>
+
+
+<!-- Header section -->
+<header class="header-section clearfix">
+    <a href="index.html" class="site-logo">
+        <img src="img/logo.png" alt="">
+    </a>
+    <ul class="main-menu">
+        <li><a href="{{route('home.index')}}">Home</a></li>
+        <li><a href="{{route('home.about')}}">About</a></li>
+        <li><a href="#">Pages</a>
+            <ul class="sub-menu">
+                <li><a href="category.html">Category</a></li>
+                <li><a href="playlist.html">Playlist</a></li>
+                <li><a href="{{route('artist.index')}}">Artist</a></li>
+                <li><a href="{{route('album.index')}}">Albums</a></li>
+                <li><a href="{{route('music.index')}}">Musics</a></li>
+            </ul>
+        </li>
+        <li><a href="{{route('news.index')}}">News</a></li>
+        <li><a href="{{route('home.contact')}}">Contact</a></li>
+        <li>
+            <form class="d-flex" role="search" action="{{route("search.results")}}" method="get">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </li>
+    </ul>
+
+    @guest()
+        @if(!Auth::guard('admin')->check())
+            @if (Route::has('register'))
+                <a href="{{ route('register') }}" class="site-btn">Create an account</a>
+            @endif
+            @if (Route::has('login'))
+                <a href="{{ route('login') }}" class="site-btn sb-c2">Login</a>
+            @endif
+        @else
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->name: Auth::user()->name }}
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    @can('create', Music::class)
+                        <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
+                    @endcan
+                    @auth('admin')
+                        <a class="dropdown-item"
+                           href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
+                            My Profile</a>
+                    @endauth
+                    @auth()
+                        @if(Auth::user()->is_artist)
+                            <a class="dropdown-item"
+                               href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
+                                My Profile</a>
+                        @else
+                            <a class="dropdown-item"
+                               href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
+                                My Profile</a>
+                        @endif
+                    @endauth
+                    <a class="dropdown-item" href="#">Favourites</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                          class="d-none">
+                        @csrf
+                    </form>
+                </div>
+            </li>
+        @endif
+    @else
+        <ul class="main-menu">
+            <li>
+                <a href="#">{{Auth::guard('admin')->check() ? Auth::guard('admin')->user()->name : Auth::user()->name}}</a>
+                <ul class="sub-menu">
+                    <li><a href="{{route('music.create')}}">Add New Music</a></li>
+                    @auth('admin')
+                        <a href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
+                            My Profile</a>
+                    @endauth
+                    @auth()
+                        @if(Auth::user()->artist_id)
+                            <li><a href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
+                                My Profile</a></li>
+                        @else
+                            <li><a href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
+                                My Profile</a></li>
+                        @endif
+                    @endauth
+                    <li><a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a></li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                          class="d-none">
+                        @csrf
+                    </form>
+                </ul>
+            </li>
+        </ul>
+    @endguest
+    {{--    <div class="header-right">--}}
+    {{--        <a href="#" class="hr-btn">Help</a>--}}
+    {{--        <span>|</span>--}}
+    {{--        <div class="user-panel">--}}
+    {{--            <a href="{{route('login')}}" class="login">Login</a>--}}
+    {{--            <a href="{{route('register')}}" class="register">Create an account</a>--}}
+    {{--        </div>--}}
+    {{--    </div>--}}
+
+</header>
+<!-- Header section end -->
+
 
 <main class="py-4">
     @yield('content')
