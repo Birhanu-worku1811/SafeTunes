@@ -61,6 +61,4 @@
     </div>
 </section>
 <!-- Blog section end -->
-
-
 @endsection

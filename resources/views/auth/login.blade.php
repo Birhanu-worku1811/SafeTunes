@@ -57,6 +57,15 @@
                                     </span>
                                     @enderror
 
+                                    <div class="col col-md-4">
+                                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha_token" class="form-control @error('g-recaptcha-response') is-invalid @enderror">
+                                        @if($errors->has('g-recaptcha-response'))
+                                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+
                                     <div class="row mb-3">
                                         <div class="col-md-6 offset-md-4">
                                             <div class="form-check">
@@ -72,7 +81,10 @@
 
                                     <div class="row mb-0">
                                         <div class="col-md-8 offset-md-4">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary g-recaptcha"
+                                                    data-sitekey="{{config('services.recaptcha.site_key')}}"
+                                                    data-callback='onSubmit'
+                                                    data-action='register'>
                                                 {{ __('Login') }}
                                             </button>
 
@@ -92,3 +104,11 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function onSubmit(token) {
+            document.getElementById("user-form").submit();
+        }
+    </script>
+@endpush

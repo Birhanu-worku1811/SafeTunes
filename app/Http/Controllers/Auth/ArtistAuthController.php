@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
 use App\Models\User;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -48,6 +49,7 @@ class ArtistAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:artists|unique:users',
             'password' => 'required|min:6',
+            'g-recaptcha-response' => ['required', new Recaptcha]
         ]);
 
         $data = $request->all();
