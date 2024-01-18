@@ -12,6 +12,12 @@ class Admin extends Model implements Authenticatable
 {
     use HasFactory, LogsActivity;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
     public function getAuthIdentifierName(): string
     {
         return 'id'; // Change 'id' to the actual name of your identifier column if different

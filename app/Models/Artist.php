@@ -21,12 +21,18 @@ class Artist extends Model
         'bio',
         'genre',
         'band_name',
-        'instrument'
+        'instrument',
+        'photo'
     ];
 
     public function music():HasMany
     {
         return $this->hasMany(Music::class);
+    }
+
+    public function album(): HasMany
+    {
+        return $this->hasMany(Album::class);
     }
 
     /**

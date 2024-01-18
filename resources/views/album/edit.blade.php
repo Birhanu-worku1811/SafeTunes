@@ -13,7 +13,7 @@
 
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" value="{{ $album->title}}" required>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ Crypt::decrypt($album->title)}}" required>
                         @error('title')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -41,6 +41,21 @@
                         @error('cover_image')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            @if(config('services.recaptcha.key'))
+                                <div
+                                    class="g-recaptcha @error('g-recaptcha-response') is-invalid @enderror"
+                                    data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+                            @endif
+                            @error('g-recaptcha-response')
+                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                            @enderror
+                        </div>
                     </div>
 
 {{--                    <div class="mb-3">--}}

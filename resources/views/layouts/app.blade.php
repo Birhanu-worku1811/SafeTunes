@@ -96,7 +96,9 @@
                                     <a class="dropdown-item"
                                        href="{{ route('news.create') }}">
                                         Add News</a>
-                                    <a class="dropdown-item" href="{{route('admin.users')}}">Users</a>
+                                    <a class="dropdown-item" href="{{route('admin-dashboard')}}">Dashboard</a>
+                                    <a class="dropdown-item" href="{{route('admin.users.index')}}">Users</a>
+                                    <a class="dropdown-item" href="{{route('admin.admins.index')}}">Admins</a>
                                 @endauth
                                 @auth()
                                     @if(Auth::user()->is_artist)

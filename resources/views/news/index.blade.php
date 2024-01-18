@@ -41,9 +41,7 @@
                         <p>{{ $singleNews->content }} </p>
                     </div>
                 @endforeach
-                <div class="site-pagination">
-                    {{ $news->links() }}
-                </div>
+                {{$news->onEachSide(1)->links()}}
             @endif
         </div>
     </section>

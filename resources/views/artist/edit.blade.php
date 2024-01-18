@@ -7,13 +7,13 @@
                 Edit Profile
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('artist.update', $artist->id) }}">
+                <form method="POST" action="{{ route('artist.update', $artist->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="name" name="name" value="{{ $artist->name }}">
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="name" name="name" value="{{ $artist->name }}" accept="image/*">
                         @error('name')
                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -57,6 +57,16 @@
                         <input type="text" class="form-control @error('email') is-invalid @enderror" id="band_name" name="band_name"
                                value="{{ $artist->band_name }}">
                         @error('band_name')
+                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Band Name</label>
+                        <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo">
+                        @error('photo')
                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

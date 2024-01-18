@@ -15,7 +15,7 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = Album::all();
+        $albums = Album::paginate(10);
         $pageTitle = 'albums';
         return view('album.index', compact('pageTitle', 'albums'));
     }
@@ -72,7 +72,7 @@ class AlbumController extends Controller
                     'album_id' => $album->id,
                     'music_file' => 'uploads/music/'.$audioFileName,
                     'artist_id' => Auth::user()->artist_id,
-                    'title' => Crypt::decrypt($musicTitle)
+                    'title' =>$musicTitle
                 ]);
             }
         }
@@ -106,6 +106,7 @@ class AlbumController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        dd($request->all());
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',

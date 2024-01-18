@@ -43,9 +43,7 @@ class ArtistController extends Controller
         $artist = Artist::findOrFail($id);
         $pageTitle = 'Artist-'.$artist->name.'Profile-edit';
 
-        return view('artist.edit', [
-            'artist' => $artist,
-        ], compact('pageTitle'));
+        return view('artist.edit',compact('pageTitle', 'artist'));
     }
 
     /**
@@ -60,18 +58,26 @@ class ArtistController extends Controller
             'genre' => 'nullable|string',
             'band_name' => 'nullable|string',
             'instrument' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000'
         ]);
 
         $artist = Artist::findOrFail($id);
         $userAsArtist = User::where('artist_id', $id);
 
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/profiles'), $imageName);
+
+            $validatedData['photo'] = 'uploads/profiles/' . $imageName;
+        }
+
         // Encrypting the email
-        $validatedData['email'] = Crypt::encrypt($validatedData['email']);
 
         $artist->update($validatedData);
         $userAsArtist->update([
             'name' => $validatedData['name'],
-            'email' => Crypt::encrypt($validatedData['email']),
+            'email' => $validatedData['email'],
         ]);
 
         // Redirect back with a success message

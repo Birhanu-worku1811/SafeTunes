@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Rules\Recaptcha;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 use Validator;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Validator::extend('recaptcha', 'App\\Rules\\Recaptcha@validate');
+        Paginator::useBootstrap();
     }
 }

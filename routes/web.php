@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ArtistController;
-use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\ArtistAuthController;
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\ContactController;
@@ -12,7 +12,6 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlbumMiddleware;
-use App\Http\Middleware\ArtistMiddleware;
 use App\Http\Middleware\MusicMiddleware;
 use App\Http\Middleware\NewsMiddleware;
 use App\Models\User;
@@ -36,14 +35,23 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [AdminAuthController::class, 'dashboard'])->name('admin-dashboard')->middleware(AdminMiddleware::class);
-    Route::get('/login', [AdminAuthController::class, 'loginForm'])->name('admin-auth.login-form');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin-auth.login');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin-auth.logout');
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin-dashboard')->middleware(AdminMiddleware::class);
+    Route::get('/login', [AdminController::class, 'loginForm'])->name('admin-auth.login-form');
+    Route::post('/login', [AdminController::class, 'login'])->name('admin-auth.login');
+    Route::post('/logout', [AdminController::class, 'logout'])->name('admin-auth.logout');
     Route::get('/profile/{id}', function ($id) {
         return view('admin.profile', compact('id'));
     })->name('admin.profile');
-    Route::get('/users', [AdminAuthController::class, 'users'])->name('admin.users')->middleware(AdminMiddleware::class); // stopped here
+    Route::group(['prefix' => 'users'], function (){
+        Route::get('/', [AdminController::class, 'usersIndex'])->name('admin.users.index')->middleware(AdminMiddleware::class);
+        Route::get('/{id}/edit', function ($id){
+            $user = User::findOrFail($id);
+            $pageTitle = 'Edit User';
+            return view('admin.users.edit', compact('user', 'pageTitle'));
+        })->name('admin.users.edit')->middleware(AdminMiddleware::class);
+        Route::put('/{id}/update',[AdminController::class, 'usersUpdate'])->name('admin.users.update')->middleware(AdminMiddleware::class);
+    });
+    Route::get('/admins', [AdminController::class, 'adminsIndex'])->name('admin.admins.index')->middleware(AdminMiddleware::class);
 });
 
 

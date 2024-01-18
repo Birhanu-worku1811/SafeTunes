@@ -17,11 +17,12 @@ class AlbumMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+//        dd($request->all());
         if (!Auth::check() || Auth::user()->artist_id===null){
             abort(401);
         }
         if ($request->isMethod('delete') || $request->isMethod('put')){
-            $albumId = $request->route('music');
+            $albumId = $request->route('album');
             if (!$this->isOwner($albumId)){
                 abort(401);
             }
@@ -32,6 +33,6 @@ class AlbumMiddleware
     public function isOwner($id): bool
     {
         $album = Album::findOrFail($id);
-        return $album->artist_id === Auth::user()->id;
+        return $album->artist_id === Auth::user()->artist_id;
     }
 }
