@@ -62,7 +62,7 @@ class RegisterController extends Controller
                 ->numbers()
                 ->symbols()
                 ->uncompromised(),
-            'g-recaptcha-response' => ['required', new Recaptcha]
+            'g-recaptcha-response' => 'required|recaptcha'
         ]);
     }
 

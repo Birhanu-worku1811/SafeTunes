@@ -49,7 +49,7 @@ class ArtistAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:artists|unique:users',
             'password' => 'required|min:6',
-            'g-recaptcha-response' => ['required', new Recaptcha]
+            'g-recaptcha-response' => 'required|recaptcha'
         ]);
 
         $data = $request->all();

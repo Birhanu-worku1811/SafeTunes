@@ -11,7 +11,7 @@
 
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" >
+                            <div class="tab-pane fade show active">
                                 <!-- User Login Form -->
                                 <form method="POST" id="user-form" action="{{ route('login') }}">
                                     @csrf
@@ -44,26 +44,25 @@
 
                                             @error('password')
                                             <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                                <strong>{{ $message }}</strong>
+                                            </span>
                                             @enderror
                                         </div>
                                     </div>
 
-
-                                    @error('any')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-
-                                    <div class="col col-md-4">
-                                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha_token" class="form-control @error('g-recaptcha-response') is-invalid @enderror">
-                                        @if($errors->has('g-recaptcha-response'))
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            @if(config('services.recaptcha.key'))
+                                                <div
+                                                    class="g-recaptcha @error('g-recaptcha-response') is-invalid @enderror"
+                                                    data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+                                            @endif
+                                            @error('g-recaptcha-response')
                                             <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                    </span>
-                                        @endif
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <div class="row mb-3">
@@ -79,12 +78,10 @@
                                         </div>
                                     </div>
 
+
                                     <div class="row mb-0">
                                         <div class="col-md-8 offset-md-4">
-                                            <button type="submit" class="btn btn-primary g-recaptcha"
-                                                    data-sitekey="{{config('services.recaptcha.site_key')}}"
-                                                    data-callback='onSubmit'
-                                                    data-action='register'>
+                                            <button type="submit" class="btn btn-primary">
                                                 {{ __('Login') }}
                                             </button>
 

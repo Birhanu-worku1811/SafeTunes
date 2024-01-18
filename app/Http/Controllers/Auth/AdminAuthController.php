@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class AdminAuthController extends Controller
         $request->validate([
             'email' => 'required',
             'password' => 'required',
+            'g-recaptcha-response' => 'required|recaptcha'
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -31,6 +33,18 @@ class AdminAuthController extends Controller
         }
 
         return redirect()->route('admin-auth.login-form')->with('error', 'Login details are not valid!');
+    }
+
+    public function dashboard()
+    {
+        return view('admin.dashboard');
+    }
+
+    public function users()
+    {
+        $users = User::paginate(10);
+        $pageTitle = 'Users';
+        return view('admin.users', compact('users', 'pageTitle'));
     }
 
     public function logout()

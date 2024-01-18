@@ -3,31 +3,20 @@
 namespace App\Rules;
 
 use Closure;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
-class Recaptcha implements ValidationRule
+class Recaptcha
 {
-    /**
-     * Run the validation rule.
-     *
-     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
-     */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
+    public function validate(string $attribute, $value, $parameters, $validator)
     {
-        $g_recaptcha_response = Http::asForm()->post("https://www.google.com/recaptcha/api/siteverify", [
-            'secret' => config('services.recaptcha.secret_key'),
-            'response' => $value,
-            'remoteid' => request()->ip()
+        $client = new Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $value,
+            ],
         ]);
-        $recapcha_response = $g_recaptcha_response->json();
-//        dd($res);
-//        dd($res['score']);
-//        if (!$g_recaptcha_response->json('success')) {
-//            $fail("The {$attribute} is invalid.");
-//        }
-        if ($recapcha_response['score'] < 0.6){
-            $fail("Suspicious Activity detected, please try again later!");
-        }
+        $body = json_decode((string) $response->getBody());
+        return $body->success;
     }
 }

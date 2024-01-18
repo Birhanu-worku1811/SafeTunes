@@ -10,6 +10,7 @@ use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SearchController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlbumMiddleware;
 use App\Http\Middleware\ArtistMiddleware;
 use App\Http\Middleware\MusicMiddleware;
@@ -34,12 +35,17 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-Route::get('/admin', [AdminAuthController::class, 'loginForm'])->name('admin-auth.login-form');
-Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin-auth.login');
-Route::post('/admin', [AdminAuthController::class, 'logout'])->name('admin-auth.logout');
-Route::get("admin/profile/{id}", function ($id){
-    return view('admin.profile', compact('id'));
-})->name('admin.profile');
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [AdminAuthController::class, 'dashboard'])->name('admin-dashboard')->middleware(AdminMiddleware::class);
+    Route::get('/login', [AdminAuthController::class, 'loginForm'])->name('admin-auth.login-form');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin-auth.login');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin-auth.logout');
+    Route::get('/profile/{id}', function ($id) {
+        return view('admin.profile', compact('id'));
+    })->name('admin.profile');
+    Route::get('/users', [AdminAuthController::class, 'users'])->name('admin.users')->middleware(AdminMiddleware::class); // stopped here
+});
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');

@@ -57,6 +57,21 @@
                                     @endif
 
                                     <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            @if(config('services.recaptcha.key'))
+                                                <div
+                                                    class="g-recaptcha @error('g-recaptcha-response') is-invalid @enderror"
+                                                    data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+                                            @endif
+                                            @error('g-recaptcha-response')
+                                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
                                         <div class="col-md-6 offset-md-4">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="remember"

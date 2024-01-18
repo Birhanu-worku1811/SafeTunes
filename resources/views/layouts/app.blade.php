@@ -17,11 +17,7 @@
           integrity="sha512-..." crossorigin="anonymous"/>
 
     <div class="animate__animated animate__zoomIn"> <!-- Add animation classes here -->
-        <script src="https://www.google.com/recaptcha/api.js"></script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-                async defer>
-        </script>
-
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -91,24 +87,26 @@
                                 {{ Auth::guard('admin')->check() ? Auth::guard('admin')->user()->name: Auth::user()->name }}
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"
+                                 style="background-color: #051b11; padding: 20px">
                                 @can('create', Music::class)
                                     <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
                                 @endcan
                                 @auth('admin')
                                     <a class="dropdown-item"
-                                       href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
-                                        My Profile</a>
+                                       href="{{ route('news.create') }}">
+                                        Add News</a>
+                                    <a class="dropdown-item" href="{{route('admin.users')}}">Users</a>
                                 @endauth
                                 @auth()
                                     @if(Auth::user()->is_artist)
                                         <a class="dropdown-item"
                                            href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
-                                            My Profile</a>
+                                            Your Profile</a>
                                     @else
                                         <a class="dropdown-item"
                                            href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
-                                            My Profile</a>
+                                            Your Profile</a>
                                     @endif
                                 @endauth
                                 <a class="dropdown-item" href="#">Favourites</a>
@@ -136,21 +134,22 @@
                              style="background-color: #051b11; padding: 20px">
                             @can('create', Music::class)
                                 <a class="dropdown-item" href="{{ route('music.create') }}">Add new music</a>
+                                <a class="dropdown-item" href="{{ route('album.create') }}">Add new album</a>
                             @endcan
                             @auth('admin')
                                 <a class="dropdown-item"
                                    href="{{ route('admin.profile', Auth::guard('admin')->user()->id) }}">
-                                    My Profile</a>
+                                    Your Profile</a>
                             @endauth
                             @auth()
                                 @if(Auth::user()->is_artist)
                                     <a class="dropdown-item"
                                        href="{{ route('artist.show', ['artist' => Auth::user()->id]) }}">
-                                        My Profile</a>
+                                        Your Profile</a>
                                 @else
                                     <a class="dropdown-item"
                                        href="{{ route('user.profile', ['id' => Auth::user()->id]) }}">
-                                        My Profile</a>
+                                        Your Profile</a>
                                 @endif
                             @endauth
                             <a class="dropdown-item" href="#">Favourites</a>

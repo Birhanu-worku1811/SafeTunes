@@ -120,23 +120,25 @@
                                            name="password_confirmation" required autocomplete="new-password">
                                 </div>
                             </div>
-                            <div class="col col-md-4">
-                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha_token" class="form-control @error('g-recaptcha-response') is-invalid @enderror">
-                                @if($errors->has('g-recaptcha-response'))
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    @if(config('services.recaptcha.key'))
+                                        <div
+                                            class="g-recaptcha @error('g-recaptcha-response') is-invalid @enderror"
+                                            data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+                                    @endif
+                                    @error('g-recaptcha-response')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                                    </span>
-                                @endif
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-{{--                            @if($errors->has('g-recaptcha-response'))--}}
-{{--                                <div class="g-recaptcha" data-sitekey="{{config('services.recaptcha2.site_key')}}"></div>--}}
-{{--                            @endif--}}
+
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary g-recaptcha"
-                                            data-sitekey="{{config('services.recaptcha.site_key')}}"
-                                            data-callback='onSubmit'
-                                            data-action='register'>
+                                    <button type="submit" class="btn btn-primary">
                                         {{ __('Register') }}
                                     </button>
                                 </div>
@@ -180,10 +182,6 @@
                     }
                 });
             });
-
-            function onSubmit(token) {
-                document.getElementById("registrationForm").submit();
-            }
         </script>
 {{--        @if($errors->has('g-recaptcha-response'))--}}
 {{--            <script type="text/javascript">--}}
