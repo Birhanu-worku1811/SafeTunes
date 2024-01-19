@@ -49,7 +49,7 @@ class AlbumController extends Controller
 
 
         $album = Album::create([
-            'title' => Crypt::encrypt($validatedData['title']),
+            'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'cover_image' => $coverImageName,
             'release_date' => $validatedData['release_date'],
@@ -114,8 +114,6 @@ class AlbumController extends Controller
             'release_date' =>'required|date',
             'audio_files.*' => 'required|mimes:mp3,wav,ogg',
         ]);
-
-        $validatedData['title'] = Crypt::encrypt($validatedData['title']);
 
         $album = Album::findOrFail($id);
 

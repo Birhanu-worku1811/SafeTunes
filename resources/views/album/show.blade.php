@@ -16,7 +16,7 @@
                         <a href="{{ route('album.edit', $album->id) }}" class="btn btn-primary">Edit Album</a>
                     </div>
                 @endif
-                <h2>{{ Crypt::decrypt($album->title) }}</h2>
+                <h2>{{ $album->title }}</h2>
                 <p>{{ $album->description }}</p>
                 <p class="card-text">by {{ $album->artist->name }}</p>
                 <p class="card-text">Released {{ $album->created_at->diffForHumans() }}</p>

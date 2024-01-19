@@ -6,12 +6,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-9">
-                        <h5 class="card-title">{{ Crypt::decrypt($music->title) }}</h5>
+                    <div class="{{ $music->thumbnail ?? $music->album->cover_image ? 'col-md-9' : 'col-md-12' }}">
+                        <h5 class="card-title">{{$music->title }}</h5>
                         <!-- Include the rest of the details -->
                         <hr>
                         <p class="card-text">Artist: {{ $music->artist->name }}</p>
-                        <p class="card-text">Album: {{ $music->album }}</p>
+                        <p class="card-text">Album: {{ $music->album->title }}</p>
                         <p class="card-text">Genre: {{ $music->genre }}</p>
                         <p class="card-text">Instrument: {{ $music->instrument }}</p>
                         <p class="card-text">Band Name: {{ $music->band_name }}</p>
@@ -35,9 +35,10 @@
                             @endcan
                         </div>
                     </div>
-                    @if($music->thumbnail)
+                    @if($music->album->cover_image || $music->thumbnail)
                         <div class="col-md-3">
-                            <img src="{{ asset($music->thumbnail) }}" alt="Music Cover Image" style="max-width: 100%;">
+                            <img src="{{ asset($music->thumbnail ?? $music->album->cover_image) }}" alt="Album Cover Image" style="max-width: 100%;">
+                            <p class="mt-2">Album Cover</p>
                         </div>
                     @endif
                 </div>

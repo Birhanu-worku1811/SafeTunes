@@ -37,7 +37,7 @@
                     <div class="blog-item">
                         <img src="{{asset($singleNews->image_path)}}" alt="{{$singleNews->title}}">
                         <div class="blog-date">{{$singleNews->created_at->diffForHumans()}}</div>
-                        <h3>{{$singleNews->title}}</h3>
+                        <a href="{{route('news.show', $singleNews->id)}}"> <h3>{{$singleNews->title}}</h3></a>
                         <p>{{ $singleNews->content }} </p>
                     </div>
                 @endforeach

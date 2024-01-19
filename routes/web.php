@@ -14,6 +14,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlbumMiddleware;
 use App\Http\Middleware\MusicMiddleware;
 use App\Http\Middleware\NewsMiddleware;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,8 +47,10 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/', [AdminController::class, 'usersIndex'])->name('admin.users.index')->middleware(AdminMiddleware::class);
         Route::get('/{id}/edit', function ($id){
             $user = User::findOrFail($id);
+            $admin = Admin::where('email', $user->email)->first();
+            $isAdmin = (bool)$admin;
             $pageTitle = 'Edit User';
-            return view('admin.users.edit', compact('user', 'pageTitle'));
+            return view('admin.users.edit', compact('user', 'pageTitle', 'isAdmin'));
         })->name('admin.users.edit')->middleware(AdminMiddleware::class);
         Route::put('/{id}/update',[AdminController::class, 'usersUpdate'])->name('admin.users.update')->middleware(AdminMiddleware::class);
     });

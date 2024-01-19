@@ -13,7 +13,7 @@
 
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" value="{{ Crypt::decrypt($album->title)}}" required>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ $album->title}}" required>
                         @error('title')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror

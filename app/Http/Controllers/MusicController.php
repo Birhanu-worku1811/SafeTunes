@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Music;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 
 class MusicController extends Controller
 {
@@ -15,7 +14,7 @@ class MusicController extends Controller
     public function index()
     {
         $pageTitle = 'musics';
-        $musics = Music::all();
+        $musics = Music::paginate(10);
         return view('music.index', compact(['pageTitle', 'musics']));
     }
 
@@ -40,12 +39,11 @@ class MusicController extends Controller
 //        dd($file->getSize());
         $request->validate([
             'title' => 'required|string|max:255',
-            'album' => 'required|string|max:255',
             'genre' => 'required|string|max:255',
             'instrument' => 'required|string|max:255',
             'band_name' => 'required|string|max:255',
             'music_file' => 'required|mimes:mp3,wav,mp4,mov,ogg|max: 102400',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000'
         ]);
 
 //        dd($file->getClientOriginalName());
@@ -65,8 +63,7 @@ class MusicController extends Controller
 
             // Create a new Music record in the database
             $music = Music::create([
-                'title' => Crypt::encrypt($request->title),
-                'album' => $request->album,
+                'title' => $request->title,
                 'genre' => $request->genre,
                 'instrument' => $request->instrument,
                 'band_name' => $request->band_name,
@@ -114,7 +111,6 @@ class MusicController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'album' => 'required|string|max:255',
             'genre' => 'required|string|max:255',
             'instrument' => 'required|string|max:255',
             'band_name' => 'required|string|max:255',
@@ -123,8 +119,7 @@ class MusicController extends Controller
 
         $music = Music::findOrFail($id);
 
-        $music->title = Crypt::encrypt($request->title);
-        $music->album = $request->album;
+        $music->title = $request->title;
         $music->genre = $request->genre;
         $music->instrument = $request->instrument;
         $music->band_name = $request->band_name;

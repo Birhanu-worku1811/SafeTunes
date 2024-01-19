@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewAdmin;
 use App\Models\Admin;
 use App\Models\Album;
 use App\Models\Music;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -69,6 +71,7 @@ class AdminController extends Controller
                 'password' => $user->password,
             ]);
             $admin->save();
+            Mail::to($user->email)->send(new NewAdmin($user));
             return redirect()->route('admin.users.index')->with('success', 'User is now an admin');
         }
         return redirect()->route('admin.users.index');

@@ -20,8 +20,8 @@
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
                 <select class="form-select" id="role" name="role" required>
-                    <option value="user" selected>User</option>
-                    <option value="admin">Admin</option>
+                    <option value="user" {{!$isAdmin ? 'selected' : ''}}>User</option>
+                    <option value="admin" {{$isAdmin ? "selected" : ''}}>Admin</option>
                 </select>
             </div>
 

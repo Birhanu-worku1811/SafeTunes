@@ -11,7 +11,7 @@
                             <img src="{{ asset($music->thumbnail) }}" class="card-img-top" alt="Music Image" style="max-height: 100px; max-width: 100px;">
                         @endif
                         <div class="card-body">
-                            <h5 class="card-title">{{ Crypt::decrypt($music->title) }}</h5>
+                            <h5 class="card-title">{{ $music->title }}</h5>
                             <p class="card-text"> by {{ $music->artist->name }}</p>
                             <audio controls preload="none" class="music-player">
                                 <source src="{{ asset($music->music_file) }}" type="audio/mpeg">
@@ -22,6 +22,7 @@
                     </div>
                 </div>
             @endforeach
+            {{ $musics->links()}}
         </div>
     </div>
 

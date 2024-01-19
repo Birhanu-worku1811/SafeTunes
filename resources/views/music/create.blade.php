@@ -19,15 +19,15 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="album" class="form-label">Album</label>
-                        <input type="text" class="form-control @error('album') is-invalid @enderror" id="album" name="album" required>
-                        @error('album')
-                        <div class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </div>
-                        @enderror
-                    </div>
+{{--                    <div class="mb-3">--}}
+{{--                        <label for="album" class="form-label">Album</label>--}}
+{{--                        <input type="text" class="form-control @error('album') is-invalid @enderror" id="album" name="album" required>--}}
+{{--                        @error('album')--}}
+{{--                        <div class="invalid-feedback" role="alert">--}}
+{{--                            <strong>{{ $message }}</strong>--}}
+{{--                        </div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
 
                     <div class="mb-3">
                         <label for="genre" class="form-label">Genre</label>

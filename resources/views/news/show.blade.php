@@ -10,16 +10,16 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    @if($news->image_path)
-                        <div class="col-md-4">
-                            <img src="{{ asset($news->image_path) }}" class="img-fluid" alt="News Image">
-                        </div>
-                    @endif
                     <div class="{{ $news->image_path ? 'col-md-8' : 'col-md-12' }}">
                         <h5 class="card-title">{{ $news->title }}</h5>
                         <p class="card-text">{{ $news->content }}</p>
                         <p class="card-text">Published Date: {{ $news->published_date }}</p>
                     </div>
+                    @if($news->image_path)
+                        <div class="col-md-4">
+                            <img src="{{ asset($news->image_path) }}" class="img-fluid" alt="News Image">
+                        </div>
+                    @endif
                     <div class="col-md-12 text-md-end mt-3">
                         @if(\Illuminate\Support\Facades\Auth::guard('admin')->check())
                             <form method="POST" action="{{ route('news.destroy', $news->id) }}" class="d-inline">
