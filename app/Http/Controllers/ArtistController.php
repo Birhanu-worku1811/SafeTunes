@@ -51,6 +51,7 @@ class ArtistController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        dd($request->all());
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' =>'required|email|unique:artists,email,' . $id,
@@ -58,6 +59,7 @@ class ArtistController extends Controller
             'genre' => 'nullable|string',
             'band_name' => 'nullable|string',
             'instrument' => 'nullable|string',
+            'website' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000'
         ]);
 
@@ -78,10 +80,11 @@ class ArtistController extends Controller
         $userAsArtist->update([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'profile_photo_path' => isset($validatedData['photo']) ?? $validatedData['photo'],
         ]);
 
         // Redirect back with a success message
-        return redirect()->route('artist.show', $id)->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     /**

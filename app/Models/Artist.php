@@ -22,7 +22,8 @@ class Artist extends Model
         'genre',
         'band_name',
         'instrument',
-        'photo'
+        'photo',
+        'website',
     ];
 
     public function music():HasMany

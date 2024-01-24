@@ -10,7 +10,7 @@ class ArtistMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $requestedArtistId = $request->route('artist');
+        $requestedArtistId = $request->route('id');
 
 //        dd($requestedArtistId);
 //        dd(Auth::user()->id ==$requestedArtistId);

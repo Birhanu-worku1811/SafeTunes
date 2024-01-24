@@ -15,11 +15,16 @@
             <tbody>
             @foreach($users as $user)
                 <tr>
+                    @php
+                        $isAdmin = (bool)\App\Models\Admin::where('email', $user->email)->first();
+                    @endphp
                     <td>{{$loop->iteration}}</td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td>
-                        @if($user->artist_id)
+                        @if($isAdmin)
+                            Admin
+                        @elseif($user->artist_id)
                             Artist
                         @else
                             User

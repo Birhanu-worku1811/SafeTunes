@@ -33,7 +33,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <a href="{{ route("music.show", $music->id) }}"> <h5 class="card-title">{{ $music->title }}</h5></a>
-                                <h5 class="card-title">{{ $music->album }}</h5>
+                                <h5 class="card-title">{{ $music->album->title }}</h5>
                                 <h5 class="card-title">{{ $music->genre }}</h5>
                                 <h5 class="card-title">{{ $music->instrument }}</h5>
                             </div>

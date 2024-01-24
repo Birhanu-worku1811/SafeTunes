@@ -19,6 +19,7 @@
     <div class="animate__animated animate__zoomIn"> <!-- Add animation classes here -->
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -97,6 +98,7 @@
                                        href="{{ route('news.create') }}">
                                         Add News</a>
                                     <a class="dropdown-item" href="{{route('admin-dashboard')}}">Dashboard</a>
+                                    <a class="dropdown-item" href="{{route('admin.activities')}}">Activities</a>
                                     <a class="dropdown-item" href="{{route('admin.users.index')}}">Users</a>
                                     <a class="dropdown-item" href="{{route('admin.admins.index')}}">Admins</a>
                                 @endauth
@@ -179,6 +181,16 @@
 
 
 <main class="py-4">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     @yield('content')
 </main>
 
@@ -310,15 +322,31 @@
         class="text-center p-3"
         style="background-color: rgba(0, 0, 0, 0.2)"
     >
-        © 2023 Copyright:
-        <a class="text-white" href="birhanuworu.ethiopia"
-        >Birhanu worku</a
-        >
+        © <span id="currentYear"></span> Copyright:
+        <a class="text-white" href="birhanuworu.ethiopia">Birhanu Worku</a>
     </div>
     <!-- Copyright -->
 </footer>
 
 @stack('scripts')
+
+<script>
+
+    document.getElementById('currentYear').innerText = new Date().getFullYear();
+
+    $(document).ready(function () {
+        // Hide the alert messages initially
+        $('.alert').hide();
+
+        // Show the alert messages
+        $('.alert').fadeIn();
+
+        // Set a timeout to hide the alert messages after 5 seconds
+        setTimeout(function () {
+            $('.alert').slideUp();
+        }, 5000);
+    });
+</script>
 
 </body>
 </html>

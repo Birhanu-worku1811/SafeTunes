@@ -11,7 +11,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Activitylog\Models\Activity;
+
 
 class AdminController extends Controller
 {
@@ -38,7 +42,7 @@ class AdminController extends Controller
             return redirect()->intended("/home")->with('success', 'Signed in');
         }
 
-        return redirect()->route('admin-auth.login-form')->with('error', 'Login details are not valid!');
+        return redirect()->back()->with('error', 'Login details are not valid!');
     }
 
     public function dashboard()
@@ -72,9 +76,15 @@ class AdminController extends Controller
             ]);
             $admin->save();
             Mail::to($user->email)->send(new NewAdmin($user));
-            return redirect()->route('admin.users.index')->with('success', 'User is now an admin');
+            activity()
+                ->performedOn($user)
+                ->causedBy(auth()->user()) // Assuming you have user authentication
+                ->withProperties(['role_changed_to' => 'admin'])
+                ->log('User role changed to admin');
+
+            return redirect()->route('admin.users.index')->with('success', "User $user->name is now an admin");
         }
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('error', 'something went wrong!');
     }
 
     public function adminsIndex()
@@ -82,6 +92,12 @@ class AdminController extends Controller
         $admins = Admin::paginate(10);
         $pageTitle = 'Admins';
         return view('admin.admins', compact('admins', 'pageTitle'));
+    }
+
+    public function activities()
+    {
+        $logs = Activity::all()->toArray();
+        return view('admin.activity_log', compact('logs'));
     }
 
     public function logout()

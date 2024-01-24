@@ -10,8 +10,10 @@ use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AlbumMiddleware;
+use App\Http\Middleware\LockoutUsers;
 use App\Http\Middleware\MusicMiddleware;
 use App\Http\Middleware\NewsMiddleware;
 use App\Models\Admin;
@@ -36,7 +38,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/', [AdminController::class, 'dashboard'])->name('admin-dashboard')->middleware(AdminMiddleware::class);
+    Route::get('/activities', [AdminController::class, 'activities'])->name('admin.activities');
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin-dashboard');
     Route::get('/login', [AdminController::class, 'loginForm'])->name('admin-auth.login-form');
     Route::post('/login', [AdminController::class, 'login'])->name('admin-auth.login');
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin-auth.logout');
@@ -44,18 +47,18 @@ Route::group(['prefix' => 'admin'], function () {
         return view('admin.profile', compact('id'));
     })->name('admin.profile');
     Route::group(['prefix' => 'users'], function (){
-        Route::get('/', [AdminController::class, 'usersIndex'])->name('admin.users.index')->middleware(AdminMiddleware::class);
+        Route::get('/', [AdminController::class, 'usersIndex'])->name('admin.users.index');
         Route::get('/{id}/edit', function ($id){
             $user = User::findOrFail($id);
             $admin = Admin::where('email', $user->email)->first();
             $isAdmin = (bool)$admin;
             $pageTitle = 'Edit User';
             return view('admin.users.edit', compact('user', 'pageTitle', 'isAdmin'));
-        })->name('admin.users.edit')->middleware(AdminMiddleware::class);
-        Route::put('/{id}/update',[AdminController::class, 'usersUpdate'])->name('admin.users.update')->middleware(AdminMiddleware::class);
+        })->name('admin.users.edit');
+        Route::put('/{id}/update',[AdminController::class, 'usersUpdate'])->name('admin.users.update');
     });
-    Route::get('/admins', [AdminController::class, 'adminsIndex'])->name('admin.admins.index')->middleware(AdminMiddleware::class);
-});
+    Route::get('/admins', [AdminController::class, 'adminsIndex'])->name('admin.admins.index');
+})->middleware(AdminMiddleware::class);
 
 
 
@@ -63,9 +66,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 Auth::routes();
+Route::post('/login', 'Auth\LoginController@login')->middleware(LockoutUsers::class);
 
 Route::get('/about', [AboutController::class, 'index'])->name('home.about');
 Route::get('/contact', [ContactController::class, 'index'])->name('home.contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('home.contact.store');
 //Route::get('/news', [NewsController::class, 'index'])->name('home.contact');
 Route::resource('news', NewsController::class)->middleware(NewsMiddleware::class)->only('create', 'edit', 'update', 'destroy', 'store');
 Route::resource('/news', NewsController::class)->only('index', 'show');
@@ -76,7 +81,8 @@ Route::resource('music', MusicController::class)
 Route::resource('music', MusicController::class)->only('index', 'show');
 
 
-Route::resource('artist', ArtistController::class)->only('edit', 'update', 'index', 'show');
+Route::resource('artist', ArtistController::class)->only('edit', 'index', 'show');
+Route::put('artist/{id}/update', [ArtistController::class, 'update'])->name('artist.update');
 //Route::resource('users', 'App\Http\Controllers\UserController')->only('show', 'edit', 'update');
 Route::resource('album', AlbumController::class)
     ->middleware(AlbumMiddleware::class)->only('create', 'store', 'edit', 'update', 'destroy');
@@ -86,6 +92,7 @@ Route::get('/user/profile/{id}', function ($id){
     $user = User::findOrFail($id);
     return view('user.profile', compact('user'));
 })->name('user.profile');
+Route::post('/user/profile/{id}',[UserProfileController::class, 'update'])->name('user.profile.update');
 
 // Artist Routes
 
@@ -111,3 +118,7 @@ Route::post('/email/verification-notification', function (\Illuminate\Http\Reque
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+
+//stoped accout lockout
