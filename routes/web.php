@@ -37,7 +37,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => AdminMiddleware::class], function () {
     Route::get('/activities', [AdminController::class, 'activities'])->name('admin.activities');
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin-dashboard');
     Route::get('/login', [AdminController::class, 'loginForm'])->name('admin-auth.login-form');
@@ -58,7 +58,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/{id}/update',[AdminController::class, 'usersUpdate'])->name('admin.users.update');
     });
     Route::get('/admins', [AdminController::class, 'adminsIndex'])->name('admin.admins.index');
-})->middleware(AdminMiddleware::class);
+});
 
 
 
@@ -66,7 +66,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 Auth::routes();
-Route::post('/login', 'Auth\LoginController@login')->middleware(LockoutUsers::class);
 
 Route::get('/about', [AboutController::class, 'index'])->name('home.about');
 Route::get('/contact', [ContactController::class, 'index'])->name('home.contact');
@@ -120,5 +119,3 @@ Route::post('/email/verification-notification', function (\Illuminate\Http\Reque
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
-
-//stoped accout lockout

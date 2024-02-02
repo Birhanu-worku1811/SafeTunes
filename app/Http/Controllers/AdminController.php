@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewAdmin;
+use App\Mail\MessageToNewAdmins;
+use App\Mail\NewAdminIsAdded;
 use App\Models\Admin;
 use App\Models\Album;
 use App\Models\Music;
@@ -74,8 +75,15 @@ class AdminController extends Controller
                 'email' => $user->email,
                 'password' => $user->password,
             ]);
+            //Notifying the newly added admin
             $admin->save();
-            Mail::to($user->email)->send(new NewAdmin($user));
+            Mail::to($user->email)->send(new MessageToNewAdmins($user));
+
+            //Notifying existing admins that new admin is added
+            $admins = Admin::all();
+            foreach ($admins as $admin){
+                Mail::to($admin->email)->send(new NewAdminIsAdded($admin, $user));
+            }
             activity()
                 ->performedOn($user)
                 ->causedBy(auth()->user()) // Assuming you have user authentication

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,16 +11,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewAdmin extends Mailable
+class NewAdminIsAdded extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(protected User $user)
+    public function __construct(Protected Admin $admin, protected User $user)
     {
-
+        //
     }
 
     /**
@@ -28,7 +29,7 @@ class NewAdmin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Admin',
+            subject: 'New Admin Is Added',
         );
     }
 
@@ -38,9 +39,10 @@ class NewAdmin extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.email.new_admin',
+            view: 'admin.email.notify_admins_that_new_admin_is_added',
             with: [
                 'user' => $this->user,
+                'admin' => $this->admin,
             ],
         );
     }
