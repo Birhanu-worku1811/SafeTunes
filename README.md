@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Computer System Security - Project 1
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# SafeTunes --- A secure online music player
 
-## About Laravel
+# Security Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# 1. Role Based Access Control (RBAC)
+## 1.1. User
+### 1.1.1. User Registration
+### 1.1.2. User Login
+### 1.1.3. User Logout
+### 1.1.4. User Profile
+### 1.1.5. User Password Change
+### 1.1.6. User Password Reset
+### 1.1.7. User Song Search
+### 1.1.8. User Song Play
+### 1.1.9. User View News
+### 1.1.10. User View Artist
+### 1.1.11. User View Album
+### 1.1.12. User View Playlist
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1.2. Artist
+### 1.2.1. Artist Registration
+### 1.2.2. Artist Login
+### 1.2.3. Artist Logout
+### 1.2.4. Artist Profile
+### 1.2.5. Artist Password Change
+### 1.2.6. Artist Password Reset
+### 1.2.7. Artist Song Upload
+### 1.2.8. Artist Song Delete
+### 1.2.9. Artist Song Update
+### 1.2.10. Artist album upload
+### 1.2.11. Artist album delete
+### 1.2.12. Artist album update
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 1.3. Admin
+### 1.3.1. Admin Registration
+### 1.3.2. Admin Login
+### 1.3.3. Admin Logout
+### 1.3.4. Admin Profile
+### 1.3.5. Admin Password Change
+### 1.3.6. Admin Password Reset
+### 1.3.7. Admin User Management
+### 1.3.8. Admin Artist Management
+### 1.3.9. Admin News Management
+### 1.3.10. All admins receive email when new admin is added
+### 1.3.11. A users is notified when his account role is changed to admin
+### 1.3.12. Admin can view all users
+### 1.3.13. Admin can view all artists
+### 1.3.14. Admin can view all news
+### 1.3.15. Admin can view all songs
+### 1.3.16. Admin can view all albums
 
-## Learning Laravel
+# 2. Audit Trails and Logging
+## 2.1. User
+### 2.1.1. User registration is logged
+### 2.1.2. User login is logged
+### 2.1.3. User logout is logged
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 2.2. Artist
+### 2.2.1. Artist registration is logged
+### 2.2.2. Artist login is logged
+### 2.2.3. Artist logout is logged
+### 2.2.4. Artist song upload is logged
+### 2.2.5. Artist song delete is logged
+### 2.2.6. Artist song update is logged
+### 2.2.7. Artist album upload is logged
+### 2.2.8. Artist album delete is logged
+### 2.2.9. Artist album update is logged
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 2.3. Admin
+### Admins can view all logs
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 3. Data Backups
+## 3.1. All the data in the database are backed up every 24 hours at 2:00 AM
+<img src="screenshots/img.png" alt="backup scheduler">
 
-## Laravel Sponsors
+# 4. Identification and Authentication
+## 4.1. User Registration
+## 4.2. Preventing Fake Accounts: bot prevention: 
+### Google captcha implemented in all the forms the project
+<img src="screenshots/img_1.png" alt="capticha verification">
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 5. Password Authentication
+## 5.1. Password Policies:
+* Passwords must be at least 12 characters long
+* password must contain mixed case letters, numbers and special characters
+* Uncompromised---passwords are checked against the haveibeenpwned database
+<img src="screenshots/img_2.png">
 
-### Premium Partners
+# 6. Account Lockout Policy
+## Account lockout after 5 failed login attempts
+<img src="screenshots/img_3.png">
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+# 7. Token-Based Authentication
+<img src="screenshots/img_4.png">
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
