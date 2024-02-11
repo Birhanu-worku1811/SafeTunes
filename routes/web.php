@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\Auth\ArtistAuthController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\ContactController;
 use App\Http\Controllers\Home\HomeController;
@@ -66,6 +67,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 Auth::routes();
+Route::get('/otp-login', [LoginController::class, 'otpLoginForm'])->name('otp.loginForm');
+Route::post('otp-login', [LoginController::class, 'otpLogin'])->name('otp.login');
 
 Route::get('/about', [AboutController::class, 'index'])->name('home.about');
 Route::get('/contact', [ContactController::class, 'index'])->name('home.contact');
@@ -117,5 +120,3 @@ Route::post('/email/verification-notification', function (\Illuminate\Http\Reque
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-

@@ -113,7 +113,6 @@
                                             Your Profile</a>
                                     @endif
                                 @endauth
-                                <a class="dropdown-item" href="#">Favourites</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -156,7 +155,6 @@
                                         Your Profile</a>
                                 @endif
                             @endauth
-                            <a class="dropdown-item" href="#">Favourites</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

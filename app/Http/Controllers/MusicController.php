@@ -151,9 +151,9 @@ class MusicController extends Controller
         $music = Music::findOrFail($id);
 
         // Delete associated file if exists
-        if (file_exists(public_path($music->file_path))) {
-            unlink(public_path($music->file_path));
-        }
+//        if (file_exists(public_path($music->file_path))) {
+//            unlink(public_path($music->file_path));
+//        }
 
         $music->delete();
 

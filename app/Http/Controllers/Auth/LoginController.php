@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Rules\Recaptcha;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -29,8 +30,8 @@ class LoginController extends Controller
      * @var string
      */
     protected string $redirectTo = RouteServiceProvider::HOME;
-    protected $maxAttempts = 5;
-    protected $decayMinutes = 30;
+    protected int $maxAttempts = 5;
+    protected int $decayMinutes = 30;
 
     /**
      * Create a new controller instance.
@@ -42,9 +43,22 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param Request $request
+     * @return bool
+     */
+
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
+    }
+
     protected function validateLogin(Request $request)
     {
-//        dd($request->all());
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
